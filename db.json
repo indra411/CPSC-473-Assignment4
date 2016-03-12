@@ -1,0 +1,39 @@
+{
+  "actors": [
+    {
+      "id": 1,
+      "name": "Bryan Cranston",
+      "starred": true
+    },
+    {
+      "name": "Aaron Paul",
+      "starred": true,
+      "id": 2
+    },
+    {
+      "name": "Bob Odenkirk",
+      "starred": true,
+      "id": 3
+    },
+    {
+      "id": 4,
+      "name": "Dean Norris",
+      "starred": false
+    },
+    {
+      "name": "Bart Simpsons",
+      "starred": false,
+      "id": 5
+    },
+    {
+      "name": "Lisa Simpsons",
+      "starred": false,
+      "id": 6
+    },
+    {
+      "name": "Maggie Simpsons",
+      "starred": true,
+      "id": 7
+    }
+  ]
+}

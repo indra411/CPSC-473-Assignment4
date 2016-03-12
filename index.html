@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+	<script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<style>
+		.demo-list-action {
+			width: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div id="actorsName">
+	</div>
+
+	<form action="#">
+		<div class="mdl-textfield mdl-js-textfield">
+			<input class="mdl-textfield__input" type="text" id="sample1">
+			<label class="mdl-textfield__label" for="sample1"> text...</label>
+		</div>
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effet mdl-button--colored" id="addActor">
+			<i class="material-icons">add</i>
+		</button>
+
+
+	</form>
+	
+
+
+	<script type="text/javascript">
+		var main = function() {
+			"use strict";
+
+			$.getJSON("db.json", function (data) {
+				var $list = $("<ul>");
+				var $index = 1;
+
+				data.actors.forEach(function (actor) {
+					var $indv = $("<li>");
+					$indv.text(actor.name);
+					$list.append($indv);
+				});
+
+				$("body").append($list);
+
+				var $demoListItem = $('<div class="demo-list-action mdl-list">');
+
+				data.actors.forEach(function (actor) {
+					var $name = actor.name;
+					var $materialIcons;
+
+					var $mdlListItem = $('<div class="mdl-list__item">');
+					var $spanMdlList = $('<span class="mdl-list__item-primary-content">');
+					var $materialIconsMdlList = $('<i class="material-icons mdl-list__item-avatar">person</i>');
+					var $mdlListSecAct = $('<a class="mdl-list__item-secondary-action" href="javascript:void(0)" onclick="toggleStarButton('+$index+',\''+$name+'\')">');
+					
+					if (actor.starred === true) 
+						$materialIcons = $('<i class="material-icons" id="starButton'+$index+'">star</i>');
+					else
+						$materialIcons = $('<i class="material-icons" id="starButton'+$index+'">star-border</i>');
+
+					$index = $index + 1;
+					$demoListItem.append($mdlListItem);
+					$mdlListItem.append($spanMdlList);
+					$spanMdlList.append($materialIconsMdlList);
+					
+					var $actorName = $("<span>");
+					$actorName.text(actor.name);
+					$spanMdlList.append($actorName);
+
+					$mdlListItem.append($mdlListSecAct);
+					$mdlListSecAct.append($materialIcons);
+					
+				});
+
+				$("#actorsName").append($demoListItem);
+			});
+
+		};
+
+		$(document).ready(main);
+
+		function toggleStarButton($index,$actorName) {
+			console.log("index = " + $index);
+			console.log("actor name = " + $actorName);
+			var $rating = $("#starButton"+$index).text();
+			var $x;
+
+			console.log($rating);
+			if ($rating == "star") {
+				$x = false;
+				console.log("rating eq star");
+			}
+			else {
+				$x = true;
+				console.log("rating eq star_border");
+			}
+			
+			$.ajax({
+				method: "PUT",
+				url: "http://localhost:3000/actors/"+$index,
+				data: {"name":$actorName, "starred":$x}
+			});
+
+			window.location.reload();
+			
+		}
+
+		$("#addActor").on("click", function (event) {
+				var $newActor = $("#sample1").val();
+				console.log("add button clicked.");
+				console.log($newActor);
+				alert("button clicked");
+
+				$.post("http://localhost:3000/actors", {"name":$newActor, "starred":false}, function(data) {				});
+
+			});
+	</script>
+</body>
+</html>
