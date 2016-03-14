@@ -23,27 +23,14 @@
 		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effet mdl-button--colored" id="addActor">
 			<i class="material-icons">add</i>
 		</button>
-
-
 	</form>
 	
-
-
 	<script type="text/javascript">
 		var main = function() {
 			"use strict";
 
 			$.getJSON("db.json", function (data) {
-				var $list = $("<ul>");
 				var $index = 1;
-
-				data.actors.forEach(function (actor) {
-					var $indv = $("<li>");
-					$indv.text(actor.name);
-					$list.append($indv);
-				});
-
-				$("body").append($list);
 
 				var $demoListItem = $('<div class="demo-list-action mdl-list">');
 
@@ -83,12 +70,9 @@
 		$(document).ready(main);
 
 		function toggleStarButton($index,$actorName) {
-			console.log("index = " + $index);
-			console.log("actor name = " + $actorName);
 			var $rating = $("#starButton"+$index).text();
 			var $x;
 
-			console.log($rating);
 			if ($rating == "star") {
 				$x = false;
 				console.log("rating eq star");
@@ -109,12 +93,9 @@
 		}
 
 		$("#addActor").on("click", function (event) {
-				var $newActor = $("#sample1").val();
-				console.log("add button clicked.");
-				console.log($newActor);
-				alert("button clicked");
-
-				$.post("http://localhost:3000/actors", {"name":$newActor, "starred":false}, function(data) {				});
+			var $newActor = $("#sample1").val();
+			
+			$.post("http://localhost:3000/actors", {"name":$newActor, "starred":false}, function(data) {				});
 
 			});
 	</script>
