@@ -1,103 +1,111 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
-	<script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-	<style>
-		.demo-list-action {
-			width: 300px;
-		}
-	</style>
-</head>
-<body>
-	<div id="actorsName">
-	</div>
 
-	<form action="#">
-		<div class="mdl-textfield mdl-js-textfield">
-			<input class="mdl-textfield__input" type="text" id="sample1">
-			<label class="mdl-textfield__label" for="sample1"> text...</label>
-		</div>
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effet mdl-button--colored" id="addActor">
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <style>
+        .demo-list-action {
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="actorsName">
+    </div>
+
+    <form action="#">
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="sample1">
+            <label class="mdl-textfield__label" for="sample1"> text...</label>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effet mdl-button--colored" id="addActor">
 			<i class="material-icons">add</i>
 		</button>
-	</form>
-	
-	<script type="text/javascript">
-		var main = function() {
-			"use strict";
+    </form>
 
-			$.getJSON("db.json", function (data) {
-				var $index = 1;
+    <script type="text/javascript">
+        var main = function() {
+            "use strict";
 
-				var $demoListItem = $('<div class="demo-list-action mdl-list">');
+            $.getJSON("db.json", function(data) {
+                var $index = 1;
 
-				data.actors.forEach(function (actor) {
-					var $name = actor.name;
-					var $materialIcons;
+                var $demoListItem = $('<div class="demo-list-action mdl-list">');
 
-					var $mdlListItem = $('<div class="mdl-list__item">');
-					var $spanMdlList = $('<span class="mdl-list__item-primary-content">');
-					var $materialIconsMdlList = $('<i class="material-icons mdl-list__item-avatar">person</i>');
-					var $mdlListSecAct = $('<a class="mdl-list__item-secondary-action" href="javascript:void(0)" onclick="toggleStarButton('+$index+',\''+$name+'\')">');
-					
-					if (actor.starred === true) 
-						$materialIcons = $('<i class="material-icons" id="starButton'+$index+'">star</i>');
-					else
-						$materialIcons = $('<i class="material-icons" id="starButton'+$index+'">star-border</i>');
+                data.actors.forEach(function(actor) {
+                    var $name = actor.name;
+                    var $materialIcons;
 
-					$index = $index + 1;
-					$demoListItem.append($mdlListItem);
-					$mdlListItem.append($spanMdlList);
-					$spanMdlList.append($materialIconsMdlList);
-					
-					var $actorName = $("<span>");
-					$actorName.text(actor.name);
-					$spanMdlList.append($actorName);
+                    var $mdlListItem = $('<div class="mdl-list__item">');
+                    var $spanMdlList = $('<span class="mdl-list__item-primary-content">');
+                    var $materialIconsMdlList = $('<i class="material-icons mdl-list__item-avatar">person</i>');
+                    var $mdlListSecAct = $('<a class="mdl-list__item-secondary-action" href="javascript:void(0)" onclick="toggleStarButton(' + $index + ',\'' + $name + '\')">');
 
-					$mdlListItem.append($mdlListSecAct);
-					$mdlListSecAct.append($materialIcons);
-					
-				});
+                    if (actor.starred === true)
+                        $materialIcons = $('<i class="material-icons" id="starButton' + $index + '">star</i>');
+                    else
+                        $materialIcons = $('<i class="material-icons" id="starButton' + $index + '">star-border</i>');
 
-				$("#actorsName").append($demoListItem);
-			});
+                    $index = $index + 1;
+                    $demoListItem.append($mdlListItem);
+                    $mdlListItem.append($spanMdlList);
+                    $spanMdlList.append($materialIconsMdlList);
 
-		};
+                    var $actorName = $("<span>");
+                    $actorName.text(actor.name);
+                    $spanMdlList.append($actorName);
 
-		$(document).ready(main);
+                    $mdlListItem.append($mdlListSecAct);
+                    $mdlListSecAct.append($materialIcons);
 
-		function toggleStarButton($index,$actorName) {
-			var $rating = $("#starButton"+$index).text();
-			var $x;
+                });
 
-			if ($rating == "star") {
-				$x = false;
-				console.log("rating eq star");
-			}
-			else {
-				$x = true;
-				console.log("rating eq star_border");
-			}
-			
-			$.ajax({
-				method: "PUT",
-				url: "http://localhost:3000/actors/"+$index,
-				data: {"name":$actorName, "starred":$x}
-			});
+                $("#actorsName").append($demoListItem);
+            });
 
-			window.location.reload();
-			
-		}
+        };
 
-		$("#addActor").on("click", function (event) {
-			var $newActor = $("#sample1").val();
-			
-			$.post("http://localhost:3000/actors", {"name":$newActor, "starred":false}, function(data) {				});
+        $(document).ready(main);
 
-			});
-	</script>
+        function toggleStarButton($index, $actorName) {
+            var $rating = $("#starButton" + $index).text();
+            var $x;
+
+            if ($rating == "star") {
+                $x = false;
+                console.log("rating eq star");
+            } else {
+                $x = true;
+                console.log("rating eq star_border");
+            }
+
+            $.ajax({
+                method: "PUT",
+                url: "http://localhost:3000/actors/" + $index,
+                data: {
+                    "name": $actorName,
+                    "starred": $x
+                }
+            });
+
+            window.location.reload();
+
+        }
+
+        $("#addActor").on("click", function(event) {
+            var $newActor = $("#sample1").val();
+
+            $.post("http://localhost:3000/actors", {
+                "name": $newActor,
+                "starred": false
+            }, function(data) {});
+
+        });
+    </script>
 </body>
+
 </html>

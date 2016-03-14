@@ -42,8 +42,13 @@
     },
     {
       "name": "Andy Simpsons",
-      "starred": false,
+      "starred": true,
       "id": 9
+    },
+    {
+      "name": "Indra Saputra",
+      "starred": false,
+      "id": 10
     }
   ]
 }
